@@ -344,9 +344,12 @@ then
     if test "$enable_wide_curses" != "no" -a -n "$have_mblen"
     then
       LIBS="-lncursesw $ORIG_LIBS"
+      AC_CHECK_LIB([tinfow], [curses_version], [
+                   AC_DEFINE([HAVE_TINFOW], 1, [Define to 1 if libtinfow is available.])
+                   TINFO_LIBS="-ltinfow"])
       AC_TRY_LINK(
         [#include <ncursesw/curses.h>], [initscr()],
-        [CURSES_LIB=-lncursesw
+        [CURSES_LIB="-lncursesw $TINFO_LIBS"
          AC_DEFINE(CURSES_HEADER, <ncursesw/curses.h>, [Defined to curses header file])])
     fi
 
